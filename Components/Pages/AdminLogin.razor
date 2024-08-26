@@ -1,0 +1,60 @@
+﻿@page "/admin-login"
+@inject NavigationManager NavigationManager
+@inject ICustomAuthenticationService AuthenticationService
+@using BlazorApp2
+@using Microsoft.AspNetCore.Components.Authorization
+@using BlazorApp2.Components
+
+
+<h3>Admin Login</h3>
+
+<EditForm Model="@AdminloginModel" OnValidSubmit="HandleLoginAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label for="username">Username:</label>
+        <InputText id="username" @bind-Value="AdminloginModel.Username" />
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <InputText id="password" @bind-Value="AdminloginModel.Password" type="password" />
+    </div>
+    <button type="submit">Login</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+@code {
+    private AdminLoginModel AdminloginModel = new AdminLoginModel();
+    private string errorMessage = string.Empty;
+
+    private async Task HandleLoginAsync()
+    {
+        try
+        {
+            var result = await AuthenticationService.LoginAsync(AdminloginModel.Username, AdminloginModel.Password);
+            if (result)
+            {
+                NavigationManager.NavigateTo("/admin-dashboard");
+            }
+            else
+            {
+                errorMessage = "Invalid username or password.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An error occurred: {ex.Message}";
+        }
+    }
+    public class AdminLoginModel
+    {
+        public string Username { get; set; }
+
+        public string Password { get; set; }
+    }
+}

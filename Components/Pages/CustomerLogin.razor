@@ -1,0 +1,60 @@
+﻿@page "/customer-login"
+@inject NavigationManager NavigationManager
+@inject ICustomAuthenticationService AuthenticationService
+@using BlazorApp2
+@using Microsoft.AspNetCore.Components.Authorization
+@using BlazorApp2.Components
+
+
+<h3>Customer Login</h3>
+
+<EditForm Model="@CustomerloginModel" OnValidSubmit="HandleLoginAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label for="username">Username:</label>
+        <InputText id="username" @bind-Value="CustomerloginModel.Username" />
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <InputText id="password" @bind-Value="CustomerloginModel.Password" type="password" />
+    </div>
+    <button type="submit">Login</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+@code {
+    private CustomerLoginModel CustomerloginModel = new CustomerLoginModel();
+    private string errorMessage = string.Empty;
+
+    private async Task HandleLoginAsync()
+    {
+        try
+        {
+            var result = await AuthenticationService.LoginAsync(CustomerloginModel.Username, CustomerloginModel.Password);
+            if (result)
+            {
+                NavigationManager.NavigateTo("/customer-dashboard");
+            }
+            else
+            {
+               errorMessage = "Invalid username or password.";
+            }
+        }
+    catch (Exception ex)
+    {
+        errorMessage = $"An error occurred: {ex.Message}";
+    }
+}
+    public class CustomerLoginModel
+    {
+        public string Username { get; set; }
+
+        public string Password { get; set; }
+    }
+}

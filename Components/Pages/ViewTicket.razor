@@ -1,0 +1,74 @@
+﻿@page "/view-tickets"
+@using Microsoft.AspNetCore.Authorization
+@using BlazorApp2.Models
+@using BlazorApp2.Services
+@attribute [Authorize(Roles = "Admin")]
+@inject TicketService TicketService
+
+<h3>View Tickets</h3>
+
+@if (tickets == null)
+{
+    <p>Loading...</p>
+}
+else if (tickets.Count == 0)
+{
+    <p>No tickets available.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>TicketId</th>
+                <th>Title</th>
+                <th>CustomerName</th>
+                <th>Issue</th>
+                <th>Company name</th>
+                <th>IssueCategory</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Created Date</th>
+                <th>AssignTo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in tickets)
+            {
+                <tr>
+                    <td>@ticket.TicketId</td>
+                    <td>@ticket.Title</td>
+                    <td>@ticket.CustomerName</td>
+                    <td>@ticket.Issue</td>
+                    <td>@ticket.CompanyName</td>
+                    <td>@ticket.IssueCategory</td>
+                    <td>@ticket.Description</td>
+                    <td>@ticket.Status</td>
+                    <td>@ticket.CreatedDate.ToString("yyyy-MM-dd")</td>
+                    <td>@ticket.AssignTo</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p class="text-danger">@errorMessage</p>
+}
+
+@code {
+    private List<Ticket> tickets;
+    private string errorMessage;
+
+    protected override void OnInitialized()
+    {
+        try
+        {
+            tickets = TicketService.GetTickets();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+    }
+}
