@@ -1,7 +1,6 @@
 ﻿@page "/admin-login"
 @inject NavigationManager NavigationManager
 @inject ICustomAuthenticationService AuthenticationService
-@using BlazorApp2
 @using Microsoft.AspNetCore.Components.Authorization
 @using BlazorApp2.Components
 
@@ -15,17 +14,19 @@
     <div>
         <label for="username">Username:</label>
         <InputText id="username" @bind-Value="AdminloginModel.Username" />
+        <ValidationMessage For="@(() => AdminloginModel.Username)" />
     </div>
     <div>
         <label for="password">Password:</label>
         <InputText id="password" @bind-Value="AdminloginModel.Password" type="password" />
+        <ValidationMessage For="@(() => AdminloginModel.Password)" />
     </div>
     <button type="submit">Login</button>
 </EditForm>
 
 @if (!string.IsNullOrEmpty(errorMessage))
 {
-    <div class="alert alert-danger">@errorMessage</div>
+    <div class="alert alert-danger font-weight-bold">@errorMessage</div>
 }
 
 @code {

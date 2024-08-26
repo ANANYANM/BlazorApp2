@@ -64,7 +64,7 @@ else
     {
         try
         {
-            tickets = TicketService.GetTickets();
+            tickets = TicketService.GetTickets()?? new List<Ticket>();
         }
         catch (Exception ex)
         {

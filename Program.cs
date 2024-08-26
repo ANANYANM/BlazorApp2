@@ -1,3 +1,4 @@
+using BlazorApp2;
 using BlazorApp2.Components;
 using BlazorApp2.Services;
 
@@ -10,12 +11,12 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<TicketService>();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-builder.Services.AddAuthentication("BlazorApp2")
-        .AddCookie("BlazorApp2", options =>
-        {
-            options.LoginPath = "/login";
-        });
-
+builder.Services.AddScoped<ICustomAuthenticationService, CustomAuthenticationService>();
+builder.Services.AddAuthentication("Cookies")
+    .AddCookie("Cookies", options =>
+    {
+        options.LoginPath = "/customer-login";
+    });
 
 var app = builder.Build();
 
@@ -32,8 +33,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 app.UseAuthorization();
+
 app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
-
 app.Run();

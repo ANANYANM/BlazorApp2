@@ -15,17 +15,19 @@
     <div>
         <label for="username">Username:</label>
         <InputText id="username" @bind-Value="CustomerloginModel.Username" />
+        <ValidationMessage For="@(() => CustomerloginModel.Username)" />
     </div>
     <div>
         <label for="password">Password:</label>
         <InputText id="password" @bind-Value="CustomerloginModel.Password" type="password" />
+        <ValidationMessage For="@(() => CustomerloginModel.Password)" />
     </div>
     <button type="submit">Login</button>
 </EditForm>
 
 @if (!string.IsNullOrEmpty(errorMessage))
 {
-    <div class="alert alert-danger">@errorMessage</div>
+    <div class="alert alert-danger font-weight-bold">@errorMessage</div>
 }
 
 @code {
