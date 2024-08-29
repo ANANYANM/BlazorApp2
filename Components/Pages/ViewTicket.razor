@@ -1,9 +1,10 @@
-﻿@page "/view-tickets"
-@using Microsoft.AspNetCore.Authorization
+@page "/view-tickets"
+@using Microsoft.AspNetCore.Http
 @using BlazorApp2.Models
 @using BlazorApp2.Services
-@attribute [Authorize(Roles = "Admin")]
 @inject TicketService TicketService
+@inject NavigationManager NavigationManager
+@inject AuthenticationService AuthService
 
 <h3>View Tickets</h3>
 
@@ -59,16 +60,30 @@ else
 @code {
     private List<Ticket> tickets;
     private string errorMessage;
+    private string username;
+    private string password;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        try
+        // Check if the user is valid
+        bool isValidUser = await AuthService.IsValidUser(username, password);
+
+        if (isValidUser)
         {
-            tickets = TicketService.GetTickets()?? new List<Ticket>();
+            // Proceed with creating the ticket
+            LoadTickets();
+            tickets = TicketService.GetTickets();
         }
-        catch (Exception ex)
+        else
         {
-            errorMessage = ex.Message;
+            NavigationManager.NavigateTo("/view-ticktes");
         }
     }
+
+    private void LoadTickets()
+    {
+        // Your logic to load tickets from the service
+        tickets = TicketService.GetTickets() ?? new List<Ticket>();
+    }
 }
+
