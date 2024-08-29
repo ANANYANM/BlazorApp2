@@ -1,12 +1,14 @@
-﻿@page "/Tickets"
+@page "/Tickets"
 @using BlazorApp2.Models
 @using BlazorApp2.Services
 @using Microsoft.AspNetCore.Authorization
+@inject AuthenticationService AuthService
 @inject TicketService TicketService
-@attribute [Authorize(Roles = "Customer")]
+@inject NavigationManager NavigationManager
+
 <h3>Create Ticket</h3>
 
-<EditForm Model="@newTicket" OnValidSubmit="@HandleValidSubmit" >
+<EditForm Model="@newTicket"  OnValidSubmit="@HandleValidSubmit" >
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -90,7 +92,23 @@
 @code {
     private Ticket newTicket = new Ticket();
     private List<Ticket> tickets = new List<Ticket>();
-    
+    private string errorMessage;
+    private string username;
+    private string password;
+
+    protected override async Task OnInitializedAsync()
+        {
+             bool isValidUser = await AuthService.IsValidUser(username, password);
+            if (isValidUser)
+            {
+                // Proceed with creating the ticket
+                TicketService.AddTicket(newTicket);
+            }
+            else
+            {
+                 NavigationManager.NavigateTo("/Ticktes");
+            }
+        }
 
     private void HandleValidSubmit()
     {
