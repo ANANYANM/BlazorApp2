@@ -65,18 +65,16 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        // Check if the user is valid
-        bool isValidUser = await AuthService.IsValidUser(username, password);
 
-        if (isValidUser)
+        // checks if admin, if not, does not allow to enter the page
+        if (GlobalVariables.isAdmin)
         {
-            // Proceed with creating the ticket
             LoadTickets();
             tickets = TicketService.GetTickets();
         }
         else
         {
-            NavigationManager.NavigateTo("/view-ticktes");
+            NavigationManager.NavigateTo("/admin-login");
         }
     }
 
