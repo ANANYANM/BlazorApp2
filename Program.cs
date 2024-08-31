@@ -1,5 +1,6 @@
 using BlazorApp2;
 using BlazorApp2.Components;
+using BlazorApp2.Models;
 using BlazorApp2.Services;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<TicketService>();
+builder.Services.AddSingleton<GlobalVariables>();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddScoped<ICustomAuthenticationService, CustomAuthenticationService>();
@@ -25,7 +27,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
-app.UseAuthorization();
 app.UseAuthorization();
 app.UseAntiforgery();
 app.MapRazorComponents<App>()
