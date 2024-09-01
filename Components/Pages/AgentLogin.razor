@@ -1,0 +1,44 @@
+@page "/agent-login"
+@inject NavigationManager NavigationManager
+@using BlazorApp2.Models
+@using BlazorApp2
+@using BlazorApp2.Components
+@rendermode InteractiveServer
+
+
+<h3>Agent Login</h3>
+
+<label for="username">Username:</label>
+<input type="text" @bind="@username" />
+
+<label for="password">Password:</label>
+<input type="text" @bind="@password" />
+
+<button class="btn btn-primary" @onclick="checkLogin">Login</button>
+
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+@code {
+    private string errorMessage = string.Empty;
+    string username = "";
+    string password = "";
+
+
+    private void checkLogin()
+    {
+        if (username == "agent" && password == "password")
+        {
+            // enabling this to access view tickets page
+            GlobalVariables.isAgent = true;
+            NavigationManager.NavigateTo("/agent_dashboard");
+        }
+        else
+        {
+            errorMessage = "Invalid username or password.";
+        }
+    }
+}
