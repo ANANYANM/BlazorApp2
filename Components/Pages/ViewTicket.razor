@@ -29,8 +29,8 @@ else
                 <th>IssueCategory</th>
                 <th>Description</th>
                 <th>Status</th>
-                <th>Created Date</th>
-                <th>AssignTo</th>
+                <th>Assign To</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -45,8 +45,18 @@ else
                     <td>@ticket.IssueCategory</td>
                     <td>@ticket.Description</td>
                     <td>@ticket.Status</td>
-                    <td>@ticket.CreatedDate.ToString("yyyy-MM-dd")</td>
-                    <td>@ticket.AssignTo</td>
+                    <td>
+                        <select @bind="ticket.AssignTo">
+                            <option value="">Select Agent</option>
+                            @foreach (var agent in agents)
+                            {
+                                <option value="@agent">@agent</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => AssignAgent(ticket)">Assign</button>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -58,7 +68,8 @@ else
 }
 
 @code {
-    private List<Ticket> tickets;
+    private List<Ticket> tickets= new List<Ticket>();
+    private List<string> agents = new List<string> { "Agent1", "Agent2", "Agent3" };
     private string errorMessage;
     private string username;
     private string password;
@@ -70,7 +81,6 @@ else
         if (GlobalVariables.isAdmin)
         {
             LoadTickets();
-            tickets = TicketService.GetTickets();
         }
         else
         {
@@ -80,8 +90,25 @@ else
 
     private void LoadTickets()
     {
-        // Your logic to load tickets from the service
-        tickets = TicketService.GetTickets() ?? new List<Ticket>();
+        try
+        {
+            // Your logic to load tickets from the service
+            tickets = TicketService.GetTickets() ?? new List<Ticket>();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Failed to load tickets: " + ex.Message;
+        }
+    }
+    private void AssignAgent(Ticket ticket)
+    {
+        try
+        {
+            TicketService.UpdateTicket(ticket);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Failed to assign agent: " + ex.Message;
+        }
     }
 }
-
