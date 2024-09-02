@@ -7,9 +7,6 @@
 
 <h3>Create Ticket</h3>
 
-<label for="newTicket">New Ticket:</label>
-<input type="text" id="newTicket" name="newTicket" />
-
 <div>
     <label>Ticket ID:</label>
     <input type="Number" @bind="newTicket.TicketId" />
@@ -34,23 +31,17 @@
     <label>Issue Category:</label>
     <input type="Text" @bind="newTicket.IssueCategory" />
 </div>
-<div >
+<div>
     <label>Description:</label>
-    <input type="TextArea" @bind="newTicket.Description" />
+    <TextArea @bind="newTicket.Description"></TextArea>
 </div>
-<div>
-    <label>Created Date:</label>
-    <input type="date" @bind="newTicket.CreatedDate"/>
-</div>
-<div>
-    <label>Status:</label>
-    <input input="Text" @bind="newTicket.Status" />
-</div>
-<div>
-    <label>Assign To:</label>
-    <input type="Text" @bind="newTicket.AssignTo" />
-</div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+
+<button type="submit" class="btn btn-primary" @onclick="CreateTicket">Submit</button>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p class="text-danger">@errorMessage</p>
+}
 @code {
     private Ticket newTicket = new Ticket();
     private List<Ticket> tickets = new List<Ticket>();
@@ -59,25 +50,30 @@
     private string password;
 
     protected override async Task OnInitializedAsync()
-        {
-
-        if (GlobalVariables.isCustomer==true)
-            {
-                // Proceed with creating the ticket
-                CreateTicket();
-                TicketService.AddTicket(newTicket);
-            }
-            else
-            {
-            NavigationManager.NavigateTo("/customer-login");
-            }
-        }
-
-        private void CreateTicket()
     {
-        TicketService.AddTicket(newTicket);
-        tickets = TicketService.GetTickets();
-        newTicket = new Ticket(); // Reset the form
+
+        if (GlobalVariables.isCustomer == true)
+        {
+            // Proceed with creating the ticket
+            CreateTicket();
+            tickets = TicketService.GetTickets();
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/customer-login");
+        }
+    }
+    private void CreateTicket()
+    {
+        try{
+            TicketService.AddTicket(newTicket);
+            tickets = TicketService.GetTickets(); // Refresh the ticket list
+            newTicket = new Ticket(); // Reset the form
+        }
+        catch(Exception ex)
+        {
+            errorMessage = "An error occurred while creating the ticket: " + ex.Message;
+        }
     }
 }
 
