@@ -1,1 +1,136 @@
+@page "/agent_dashboard"
+@using BlazorApp2.Models
+@using BlazorApp2.Services
+@inject TicketService TicketService
+@inject NavigationManager NavigationManager
+
+<h3>Agent Dashboard</h3>
+
+@if (assignedTickets == null)
+{
+    <p>Loading assigned tickets...</p>
+}
+else if (assignedTickets.Count == 0)
+{
+    <p>No tickets have been assigned to you.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ticket ID</th>
+                <th>Title</th>
+                <th>Customer Name</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in assignedTickets)
+            {
+                <tr>
+                    <td>@ticket.TicketId</td>
+                    <td>@ticket.Title</td>
+                    <td>@ticket.CustomerName</td>
+                    <td>@ticket.Status</td>
+                    <td>
+                        <button class="btn btn-info" @onclick="() => SelectTicket(ticket)">Review</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (selectedTicket != null)
+{
+    <div class="ticket-details">
+        <h4>Review Ticket Details</h4>
+        <div>
+            <label>Ticket ID:</label>
+            <span>@selectedTicket.TicketId</span>
+        </div>
+        <div>
+            <label>Title:</label>
+            <span>@selectedTicket.Title</span>
+        </div>
+        <div>
+            <label>Customer Name:</label>
+            <span>@selectedTicket.CustomerName</span>
+        </div>
+        <div>
+            <label>Issue:</label>
+            <span>@selectedTicket.Issue</span>
+        </div>
+        <div>
+            <label>Company Name:</label>
+            <span>@selectedTicket.CompanyName</span>
+        </div>
+        <div>
+            <label>Issue Category:</label>
+            <span>@selectedTicket.IssueCategory</span>
+        </div>
+        <div>
+            <label>Description:</label>
+            <span>@selectedTicket.Description</span>
+        </div>
+        <div>
+            <label>Created Date:</label>
+            <span>@selectedTicket.CreatedDate.ToString("yyyy-MM-dd")</span>
+        </div>
+        <div>
+            <label>Status:</label>
+            <input type="Text" @bind="selectedTicket.Status" />
+        </div>
+        <button class="btn btn-success" @onclick="UpdateTicketStatus">Update Status</button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p class="text-danger">@errorMessage</p>
+}
+
+@code {
+    private List<Ticket> assignedTickets;
+    private Ticket selectedTicket;
+    private string errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Check if the user is an authenticated agent
+        if (GlobalVariables.isAgent)
+        {
+            LoadAssignedTickets();
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/agent-login");
+        }
+    }
+
+    private void LoadAssignedTickets()
+    {
+        // Load tickets that are assigned to the current agent
+        assignedTickets = TicketService.GetTickets()
+            .Where(t => t.AssignTo == "agent").ToList();
+    }
+
+    private void SelectTicket(Ticket ticket)
+    {
+        selectedTicket = ticket;
+    }
+
+    private void UpdateTicketStatus()
+    {
+        if (selectedTicket != null)
+        {
+            TicketService.UpdateTicket(selectedTicket); // Update the ticket using the service method
+            LoadAssignedTickets(); // Refresh the list to reflect updated ticket status
+            selectedTicket = null; // Clear the selection after update
+        }
+    }
+}
+
 
