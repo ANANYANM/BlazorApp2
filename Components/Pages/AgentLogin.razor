@@ -12,7 +12,7 @@
 <input type="text" @bind="@username" />
 
 <label for="password">Password:</label>
-<input type="text" @bind="@password" />
+<input type="password" @bind="@password" />
 
 <button class="btn btn-primary" @onclick="checkLogin">Login</button>
 
@@ -34,6 +34,7 @@
         {
             // enabling this to access view tickets page
             GlobalVariables.isAgent = true;
+            GlobalVariables.CurrentAgentName = username; // Set the logged-in agent's name
             NavigationManager.NavigateTo("/agent_dashboard");
         }
         else
