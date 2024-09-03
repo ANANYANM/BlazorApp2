@@ -3,6 +3,7 @@
 @using BlazorApp2.Services
 @inject TicketService TicketService
 @inject NavigationManager NavigationManager
+@inject AuthenticationService AuthService
 
 <h3>Agent Dashboard</h3>
 
@@ -96,12 +97,14 @@ else
     private List<Ticket> assignedTickets;
     private Ticket selectedTicket;
     private string errorMessage;
+    private string currentAgent;
 
     protected override async Task OnInitializedAsync()
     {
         // Check if the user is an authenticated agent
         if (GlobalVariables.isAgent)
         {
+           
             LoadAssignedTickets();
         }
         else
@@ -112,11 +115,17 @@ else
 
     private void LoadAssignedTickets()
     {
-        // Load tickets that are assigned to the current agent
-        assignedTickets = TicketService.GetTickets()
-            .Where(t => t.AssignTo == "agent").ToList();
+        try{
+            // Fetch tickets assigned to the current agent
+            var currentAgent = GlobalVariables.CurrentAgentName;
+            assignedTickets = TicketService.GetTickets()
+                .Where(t => t.AssignTo == currentAgent).ToList();
+        }
+        catch(Exception ex)
+        {
+            errorMessage = "An error occurred while loading tickets: " + ex.Message;
+        }
     }
-
     private void SelectTicket(Ticket ticket)
     {
         selectedTicket = ticket;
@@ -126,11 +135,16 @@ else
     {
         if (selectedTicket != null)
         {
-            TicketService.UpdateTicket(selectedTicket); // Update the ticket using the service method
-            LoadAssignedTickets(); // Refresh the list to reflect updated ticket status
-            selectedTicket = null; // Clear the selection after update
+            try {
+                TicketService.UpdateTicket(selectedTicket); // Update the ticket using the service method
+                LoadAssignedTickets(); // Refresh the list to reflect updated ticket status
+                selectedTicket = null; // Clear the selection after update
+            }
+            catch(Exception ex)
+            {
+                errorMessage = "Failed to update ticket status: " + ex.Message;
+            }
         }
     }
 }
-
 
