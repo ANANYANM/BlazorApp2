@@ -1,10 +1,8 @@
 @page "/customer-login"
 @inject NavigationManager NavigationManager
-@inject ICustomAuthenticationService AuthenticationService
 @using BlazorApp2
 @using BlazorApp2.Models
 @using BlazorApp2.Components
-@using Microsoft.AspNetCore.Components.Authorization
 @rendermode InteractiveServer
 
 
@@ -13,7 +11,7 @@
 <label for="username">Username:</label>
 <input type="text" @bind="@username" />
 <label for="password">Password:</label>
-<input type="text" @bind="@password" />
+<input type="password" @bind="@password" />
 
 <button class="btn btn-primary" @onclick="checkLogin">Login</button>
 
