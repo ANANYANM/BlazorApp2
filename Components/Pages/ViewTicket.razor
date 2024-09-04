@@ -5,6 +5,7 @@
 @inject TicketService TicketService
 @inject NavigationManager NavigationManager
 @inject AuthenticationService AuthService
+@rendermode InteractiveServer
 
 <h3>View Tickets</h3>
 
@@ -69,7 +70,7 @@ else
 
 @code {
     private List<Ticket> tickets= new List<Ticket>();
-    private List<string> agents = new List<string> { "Agent1", "Agent2", "Agent3" };
+    private List<string> agents = new List<string> { "agent1", "agent2", "agent3" };
     private string errorMessage;
     private string username;
     private string password;
@@ -105,6 +106,7 @@ else
         try
         {
             TicketService.UpdateTicket(ticket);
+            errorMessage = "Ticket assigned successfully.";
         }
         catch (Exception ex)
         {
