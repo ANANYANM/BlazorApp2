@@ -100,7 +100,7 @@ else
         {
             errorMessage = "Failed to load tickets: " + ex.Message;
         }
-<<<<<<< HEAD
+
     }
     private void AssignAgent(Ticket ticket)
     {
@@ -115,19 +115,3 @@ else
         }
     }
 }
-=======
-    }
-    private void AssignAgent(Ticket ticket)
-    {
-        try
-        {
-            TicketService.UpdateTicket(ticket);
-            errorMessage = "Ticket assigned successfully.";
-        }
-        catch (Exception ex)
-        {
-            errorMessage = "Failed to assign agent: " + ex.Message;
-        }
-    }
-}
->>>>>>> 245d2971e27629012fbafe2a9b0d5477775c7906
