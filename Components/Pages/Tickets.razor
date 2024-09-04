@@ -1,9 +1,10 @@
 @page "/tickets"
+@using BlazorApp2
 @using BlazorApp2.Models
 @using BlazorApp2.Services
-@using Microsoft.AspNetCore.Authorization
 @inject TicketService TicketService
-@inject NavigationManager NavigationManager
+@inject NavigationManager NavigationManager 
+@rendermode InteractiveServer
 
 <h3>Create Ticket</h3>
 
@@ -33,10 +34,21 @@
 </div>
 <div>
     <label>Description:</label>
-    <TextArea @bind="newTicket.Description"></TextArea>
+    <input type="text" @bind="newTicket.Description"/>
 </div>
 
-<button type="submit" class="btn btn-primary" @onclick="CreateTicket">Submit</button>
+<button class="btn btn-primary" @onclick="CreateTicket">Submit</button>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger font-weight-bold">@errorMessage</div>
+}
+
+<div>Your Tickets</div>
+@foreach (var ticket in tickets)
+{
+    <div>@ticket.TicketId</div>
+}
 
 @if (!string.IsNullOrEmpty(errorMessage))
 {
@@ -54,8 +66,6 @@
 
         if (GlobalVariables.isCustomer == true)
         {
-            // Proceed with creating the ticket
-            CreateTicket();
             tickets = TicketService.GetTickets();
         }
         else
@@ -69,6 +79,7 @@
             TicketService.AddTicket(newTicket);
             tickets = TicketService.GetTickets(); // Refresh the ticket list
             newTicket = new Ticket(); // Reset the form
+            StateHasChanged();
         }
         catch(Exception ex)
         {
