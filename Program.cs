@@ -2,6 +2,8 @@ using BlazorApp2;
 using BlazorApp2.Components;
 using BlazorApp2.Models;
 using BlazorApp2.Services;
+using BlazorApp2.Data;
+using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,12 +16,15 @@ builder.Services.AddRazorComponents()
 builder.Services.AddScoped<ICustomAuthenticationService, CustomAuthenticationService>();
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<AuthenticationService>();
+// Add the database context
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
+    app.UseExceptionHandler( "/Error");
     app.UseHsts();
 }
 
