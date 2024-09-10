@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
-namespace BlazorWebApp.Controller
+namespace BlazorApp2.Controller
 {
     [Route("api/[controller]")]
     [ApiController]

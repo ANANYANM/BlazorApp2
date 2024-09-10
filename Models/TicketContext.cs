@@ -26,8 +26,4 @@ public partial class TicketContext : DbContext
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
-public class Program // Ensure this class is public
-{
-    public int Ticket { get; set; }
-}
 
