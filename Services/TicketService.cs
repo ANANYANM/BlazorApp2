@@ -3,6 +3,7 @@ namespace BlazorApp2.Services
 {
     public class TicketService
     {
+
         private List<Ticket> tickets = new List<Ticket>();
 
         public List<Ticket> GetTickets()
@@ -28,7 +29,6 @@ namespace BlazorApp2.Services
                 ticket.CompanyName = updatedTicket.CompanyName;
                 ticket.IssueCategory = updatedTicket.IssueCategory;
                 ticket.Description = updatedTicket.Description;
-                ticket.CreatedDate = updatedTicket.CreatedDate;
                 ticket.Status = updatedTicket.Status;
                 ticket.AssignTo = updatedTicket.AssignTo;
             }

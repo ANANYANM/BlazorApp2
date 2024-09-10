@@ -1,8 +1,8 @@
 using BlazorApp2;
 using BlazorApp2.Components;
+using BlazorApp2.Shared.Models;
 using BlazorApp2.Models;
 using BlazorApp2.Services;
-using BlazorApp2.Data;
 using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +17,11 @@ builder.Services.AddScoped<ICustomAuthenticationService, CustomAuthenticationSer
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<AuthenticationService>();
 // Add the database context
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+//builder.Services.AddScoped(http => new HttpClient { BaseAddress = new Uri(builder.Configuration.GetSection("BaseUri").Value!) });
+//builder.Services.AddDbContext<BlazorApp2.Models.TicketContext>(option =>
+               // option.UseSqlServer(builder.Configuration.GetConnectionString("TicketingSystem")));//
+builder.Services.AddDbContext<BlazorApp2.Models.TicketContext>(option =>
+                option.UseSqlServer(builder.Configuration.GetConnectionString("TicketingSystem")));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,8 +29,8 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler( "/Error");
     app.UseHsts();
+    app.UseMigrationsEndPoint();
 }
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

@@ -7,7 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BlazorWebApp.Shared\**" />
+    <Content Remove="BlazorWebApp.Shared\**" />
+    <EmbeddedResource Remove="BlazorWebApp.Shared\**" />
+    <None Remove="BlazorWebApp.Shared\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="latticework.cs" Version="1.0.16" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
       <PrivateAssets>all</PrivateAssets>
@@ -18,7 +27,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.4" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BlazorApp2.Shared\BlazorApp2.Shared.csproj" />
+    <ProjectReference Include="BlazorWebApp.Shared\BlazorWebApp.Shared.csproj" />
   </ItemGroup>
 
 </Project>
