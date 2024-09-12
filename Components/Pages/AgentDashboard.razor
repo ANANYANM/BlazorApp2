@@ -3,7 +3,6 @@
 @using BlazorApp2.Services
 @inject TicketService TicketService
 @inject NavigationManager NavigationManager
-@inject AuthenticationService AuthService
 @rendermode InteractiveServer
 
 <h3>Agent Dashboard</h3>
@@ -77,10 +76,10 @@ else
             <label>Description:</label>
             <span>@selectedTicket.Description</span>
         </div>
-        <div>
-            <label>Created Date:</label>
+             @*<div>
+           <label>Created Date:</label>
             <span>@selectedTicket.CreatedDate.ToString("yyyy-MM-dd")</span>
-        </div>
+        </div>*@
         <div>
             <label>Status:</label>
             <input type="Text" @bind="selectedTicket.Status" />

@@ -4,65 +4,72 @@
 @using BlazorApp2.Services
 @inject TicketService TicketService
 @inject NavigationManager NavigationManager
-@inject AuthenticationService AuthService
 @rendermode InteractiveServer
 
+@inject TicketContext _context
 <h3>View Tickets</h3>
 
 @if (tickets == null)
 {
-    <p>Loading...</p>
+        <p>Loading...</p>
 }
 else if (tickets.Count == 0)
 {
-    <p>No tickets available.</p>
+        <p>No tickets available.</p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>TicketId</th>
-                <th>Title</th>
-                <th>CustomerName</th>
-                <th>Issue</th>
-                <th>Company name</th>
-                <th>IssueCategory</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Assign To</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var ticket in tickets)
+<h3>Customer List</h3>
+    <ul>
+        @foreach (var customer in tickets)
+        {
+           <li> @customer.CustomerName - @customer.Issue</li>
+        }
+    </ul>
+    <table class ="table">
+           <thead>
+              <tr>  
+                    <th>TicketId</th>
+                    <th>Title</th>
+                    <th>CustomerName</th>
+                    <th>Issue</th>
+                    <th>Company name</th>
+                    <th>IssueCategory</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                   <th>Assign To</th>
+                   <th>Action</th>
+              </tr>
+           </thead>
+          <tbody>
+           @foreach (var ticket in tickets)
             {
-                <tr>
-                    <td>@ticket.TicketId</td>
-                    <td>@ticket.Title</td>
-                    <td>@ticket.CustomerName</td>
-                    <td>@ticket.Issue</td>
-                    <td>@ticket.CompanyName</td>
-                    <td>@ticket.IssueCategory</td>
-                    <td>@ticket.Description</td>
-                    <td>@ticket.Status</td>
-                    <td>
-                        <select @bind="ticket.AssignTo">
-                            <option value="">Select Agent</option>
-                            @foreach (var agent in agents)
-                            {
-                                <option value="@agent">@agent</option>
-                            }
-                        </select>
-                    </td>
+             <tr> 
+                 <td>@ticket.TicketId</td>
+                 <td>@ticket.Title</td>
+                 <td>@ticket.CustomerName</td>
+                 <td>@ticket.Issue</td>
+                 <td>@ticket.CompanyName</td>
+                 <td>@ticket.IssueCategory</td>
+                 <td>@ticket.Description</td>
+                 <td>@ticket.Status</td>
+                 <td>
+                     <select @bind="ticket.AssignTo">
+                             <option value="">Select Agent</option>
+                                    @foreach (var agent in agents)
+                                {
+                                    <option value="@agent">@agent</option>
+                                }
+                     </select>
+                 </td>
                     <td>
                         <button class="btn btn-primary" @onclick="() => AssignAgent(ticket)">Assign</button>
                     </td>
-                </tr>
+             </tr>
             }
         </tbody>
     </table>
-}
+ }
 @if (!string.IsNullOrEmpty(errorMessage))
 {
     <p class="text-danger">@errorMessage</p>
@@ -74,6 +81,7 @@ else
     private string errorMessage;
     private string username;
     private string password;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -94,7 +102,8 @@ else
         try
         {
             // Your logic to load tickets from the service
-            tickets = TicketService.GetTickets() ?? new List<Ticket>();
+           // tickets = TicketService.GetTickets() ?? new List<Ticket>();
+            tickets = _context.Tickets.ToList();
         }
         catch (Exception ex)
         {

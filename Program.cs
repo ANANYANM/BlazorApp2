@@ -1,6 +1,5 @@
 using BlazorApp2;
 using BlazorApp2.Components;
-using BlazorApp2.Shared.Models;
 using BlazorApp2.Models;
 using BlazorApp2.Services;
 using Microsoft.EntityFrameworkCore;
@@ -13,14 +12,9 @@ builder.Services.AddSingleton<TicketService>();
 builder.Services.AddSingleton<GlobalVariables>();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-builder.Services.AddScoped<ICustomAuthenticationService, CustomAuthenticationService>();
 builder.Services.AddAuthorization();
-builder.Services.AddScoped<AuthenticationService>();
 // Add the database context
-//builder.Services.AddScoped(http => new HttpClient { BaseAddress = new Uri(builder.Configuration.GetSection("BaseUri").Value!) });
-//builder.Services.AddDbContext<BlazorApp2.Models.TicketContext>(option =>
-               // option.UseSqlServer(builder.Configuration.GetConnectionString("TicketingSystem")));//
-builder.Services.AddDbContext<BlazorApp2.Models.TicketContext>(option =>
+builder.Services.AddDbContext<TicketContext>(option =>
                 option.UseSqlServer(builder.Configuration.GetConnectionString("TicketingSystem")));
 var app = builder.Build();
 

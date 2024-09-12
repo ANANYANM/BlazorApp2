@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>10bc10b4-0631-49dc-a13a-871c5140aa99</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,11 +30,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.4" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\BlazorApp2.Shared\BlazorApp2.Shared.csproj" />
-    <ProjectReference Include="BlazorWebApp.Shared\BlazorWebApp.Shared.csproj" />
   </ItemGroup>
 
 </Project>
