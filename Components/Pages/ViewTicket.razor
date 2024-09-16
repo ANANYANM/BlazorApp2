@@ -5,8 +5,8 @@
 @inject TicketService TicketService
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
-
 @inject TicketContext _context
+
 <h3>View Tickets</h3>
 
 @if (tickets == null)
@@ -19,7 +19,6 @@ else if (tickets.Count == 0)
 }
 else
 {
-
     <h4>Customer List</h4>
     <ul>
         @foreach (var customer in tickets)
@@ -27,7 +26,6 @@ else
             <li>@customer.CustomerName - @customer.Issue</li>
         }
     </ul>
-
     <table class="table">
         <thead>
             <tr>
@@ -104,7 +102,7 @@ else
         try
         {
             // Your logic to load tickets from the service
-            tickets = TicketService.GetTickets() ?? new List<Ticket>();
+            //tickets = TicketService.GetTickets() ?? new List<Ticket>();
             tickets = _context.Tickets.ToList();
         }
         catch (Exception ex)
