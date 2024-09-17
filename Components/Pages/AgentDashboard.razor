@@ -4,6 +4,7 @@
 @inject TicketService TicketService
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
+@inject TicketContext _context
 
 <h3>Agent Dashboard</h3>
 
@@ -98,7 +99,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         // Check if the user is an authenticated agent
-        if (GlobalVariables.isAgent)
+        if (GlobalVariables.isAgent && !string.IsNullOrEmpty(GlobalVariables.CurrentAgentName))
         {
            
             LoadAssignedTickets();
@@ -113,9 +114,9 @@ else
     {
         try{
             // Fetch tickets assigned to the current agent
-            var currentAgent = GlobalVariables.CurrentAgentName;
+      
             assignedTickets = TicketService.GetTickets()
-                .Where(t => t.AssignTo == currentAgent).ToList();
+                .Where(t => t.AssignTo == GlobalVariables.CurrentAgentName).ToList();
         }
         catch(Exception ex)
         {
@@ -127,12 +128,19 @@ else
         selectedTicket = ticket;
     }
 
-    private void UpdateTicketStatus()
+    private async Task UpdateTicketStatus()
     {
-        if (selectedTicket != null)
+        if (selectedTicket != null && !string.IsNullOrWhiteSpace(selectedTicket.Status))
         {
             try {
-                TicketService.UpdateTicket(selectedTicket); // Update the ticket using the service method
+                //TicketService.UpdateTicket(selectedTicket); // Update the ticket using the service method
+                // Update ticket status in the database
+                var ticketToUpdate = await _context.Tickets.FindAsync(selectedTicket.TicketId);
+                if (ticketToUpdate != null)
+                {
+                    ticketToUpdate.Status = selectedTicket.Status;
+                    await _context.SaveChangesAsync();  // Persist changes to the database
+                }
                 LoadAssignedTickets(); // Refresh the list to reflect updated ticket status
                 selectedTicket = null; // Clear the selection after update
             }

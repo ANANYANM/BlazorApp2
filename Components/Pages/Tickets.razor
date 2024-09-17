@@ -5,6 +5,7 @@
 @inject TicketService TicketService
 @inject NavigationManager NavigationManager 
 @rendermode InteractiveServer
+@inject TicketContext _context
 
 <h3>Create Ticket</h3>
 
@@ -66,18 +67,23 @@
 
         if (GlobalVariables.isCustomer == true)
         {
-            tickets = TicketService.GetTickets();
+            //tickets = TicketService.GetTickets();
+            tickets = _context.Tickets.ToList();
+
         }
         else
         {
             NavigationManager.NavigateTo("/customer-login");
         }
     }
-    private void CreateTicket()
+    private async void CreateTicket()
     {
         try{
-            TicketService.AddTicket(newTicket);
-            tickets = TicketService.GetTickets(); // Refresh the ticket list
+            //TicketService.AddTicket(newTicket);
+            //tickets = TicketService.GetTickets(); // Refresh the ticket list
+             _context.Tickets.Add(newTicket);
+            await  _context.SaveChangesAsync();
+             tickets =  _context.Tickets.ToList();//Refresh the ticket list
             newTicket = new Ticket(); // Reset the form
             StateHasChanged();
         }
