@@ -20,11 +20,11 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Ticket ID</th>
+                <th>TicketId</th>
                 <th>Title</th>
-                <th>Customer Name</th>
+                <th>CustomerName</th>
                 <th>Status</th>
-                <th>Actions</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -76,10 +76,6 @@ else
             <label>Description:</label>
             <span>@selectedTicket.Description</span>
         </div>
-             @*<div>
-           <label>Created Date:</label>
-            <span>@selectedTicket.CreatedDate.ToString("yyyy-MM-dd")</span>
-        </div>*@
         <div>
             <label>Status:</label>
             <input type="Text" @bind="selectedTicket.Status" />
