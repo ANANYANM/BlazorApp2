@@ -14,7 +14,7 @@ namespace BlazorApp2.Services
 
         public User AuthenticateUser(string username, string password)
         {
-            return users.FirstOrDefault(u => u.Username == username && u.Password == password);
+            return Users.FirstOrDefault(u => u.Username == username && u.Password == password);
         }
     }
 
