@@ -6,6 +6,7 @@
 @rendermode InteractiveServer
 
 
+
 <h3>Customer Login</h3>
 
 <label for="username">Username:</label>
@@ -26,17 +27,19 @@
     string password = "";
 
 
-    private void checkLogin()
+    private async Task checkLogin()
     {
         if (username == "customer" && password == "password")
+       
+        // enabling this to access view tickets page
         {
-            // enabling this to access view tickets page
             GlobalVariables.isCustomer = true;
             NavigationManager.NavigateTo("/tickets");
         }
         else
         {
             errorMessage = "Invalid username or password.";
+
         }
     }
 }

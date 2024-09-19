@@ -102,7 +102,7 @@ else
         try
         {
             // Your logic to load tickets from the service
-            tickets = TicketService.GetTickets() ?? new List<Ticket>();
+            //tickets = TicketService.GetTickets() ?? new List<Ticket>();
             tickets = _context.Tickets.ToList();
         }
         catch (Exception ex)

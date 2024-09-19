@@ -115,8 +115,9 @@ else
         try{
             // Fetch tickets assigned to the current agent
       
-            assignedTickets = TicketService.GetTickets()
-                .Where(t => t.AssignTo == GlobalVariables.CurrentAgentName).ToList();
+            //assignedTickets = TicketService.GetTickets()
+             assignedTickets =_context.Tickets
+            .Where(t => t.AssignTo == GlobalVariables.CurrentAgentName).ToList();
         }
         catch(Exception ex)
         {
@@ -141,7 +142,7 @@ else
                     ticketToUpdate.Status = selectedTicket.Status;
                     await _context.SaveChangesAsync();  // Persist changes to the database
                 }
-                LoadAssignedTickets(); // Refresh the list to reflect updated ticket status
+                 LoadAssignedTickets(); // Refresh the list to reflect updated ticket status
                 selectedTicket = null; // Clear the selection after update
             }
             catch(Exception ex)
