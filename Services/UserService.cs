@@ -3,7 +3,7 @@ namespace BlazorApp2.Services
 {
     public class UserService
     {
-        private List<User> users = new List<User>
+        private List<User> Users = new List<User>
     {
         new User { Username = "admin", Password = "password", Role = "admin" },
         new User { Username = "agent1", Password = "password", Role = "agent1" },
