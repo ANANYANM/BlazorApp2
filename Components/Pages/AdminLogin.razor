@@ -4,7 +4,7 @@
 @using BlazorApp2
 @using BlazorApp2.Components
 @rendermode InteractiveServer
-
+@inject UserService UserService
 
 <h3>Admin Login</h3>
 
@@ -30,7 +30,10 @@
 
     private async Task checkLogin()
     {
-        if (username == "admin" && password == "password")
+        //if (username == "admin" && password == "password")
+        var user = UserService.AuthenticateUser(username, password);
+
+        if (user != null && user.Role == "admin")
         {
             // enabling this to access view tickets page
             GlobalVariables.isAdmin = true;

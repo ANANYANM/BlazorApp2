@@ -4,7 +4,7 @@
 @using BlazorApp2
 @using BlazorApp2.Components
 @rendermode InteractiveServer
-
+@inject UserService UserService
 
 <h3>Agent Login</h3>
 
@@ -30,7 +30,10 @@
 
     private void checkLogin()
     {
-        if (username == "agent1" && password == "password" || username == "agent2" && password == "password" || username == "agent3" && password == "password")
+        //if (username == "agent1" && password == "password" || username == "agent2" && password == "password" || username == "agent3" && password == "password")
+        var user = UserService.AuthenticateUser(username, password);
+
+        if (user != null && user.Role == "agent1" || user != null && user.Role == "agent2" || user != null && user.Role == "agent3")
         {
             // enabling this to access view tickets page
             GlobalVariables.isAgent = true;

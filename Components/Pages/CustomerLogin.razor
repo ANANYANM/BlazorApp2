@@ -4,8 +4,7 @@
 @using BlazorApp2.Models
 @using BlazorApp2.Components
 @rendermode InteractiveServer
-
-
+@inject UserService UserService
 
 <h3>Customer Login</h3>
 
@@ -29,9 +28,11 @@
 
     private async Task checkLogin()
     {
-        if (username == "customer" && password == "password")
-       
+        //if (username == "customer" && password == "password")
         // enabling this to access view tickets page
+        var user = UserService.AuthenticateUser(username, password);
+
+        if (user != null && user.Role == "customer")
         {
             GlobalVariables.isCustomer = true;
             NavigationManager.NavigateTo("/tickets");
