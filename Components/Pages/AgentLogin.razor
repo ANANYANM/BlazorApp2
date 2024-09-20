@@ -33,7 +33,7 @@
         //if (username == "agent1" && password == "password" || username == "agent2" && password == "password" || username == "agent3" && password == "password")
         var user = UserService.AuthenticateUser(username, password);
 
-        if (user != null && user.Role == "agent1" || user != null && user.Role == "agent2" || user != null && user.Role == "agent3")
+        if (user != null && user.Role == "agent" )
         {
             // enabling this to access view tickets page
             GlobalVariables.isAgent = true;
