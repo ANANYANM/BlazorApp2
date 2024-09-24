@@ -1,0 +1,68 @@
+﻿@page "/adminsignup-approval"
+@using BlazorApp2.Models
+@using BlazorApp2.Services
+@inject CustomerService CustomerService
+@inject NavigationManager NavigationManager
+@using BlazorApp2
+@using BlazorApp2.Components
+@rendermode InteractiveServer
+
+<h3>Pending Sign-Ups</h3>
+
+@if (pendingSignUps != null)
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Company</th>
+                <th>Username</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var signUp in pendingSignUps)
+            {
+                <tr>
+                    <td>@signUp.Name</td>
+                    <td>@signUp.Company</td>
+                    <td>@signUp.Username</td>
+                    <td>
+                        <button @onclick="() => ApproveSignUp(signUp.Id)">Approve</button>
+                        <button @onclick="() => RejectSignUp(signUp.Id)">Reject</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<PendingSignUp> pendingSignUps;
+
+    protected override async Task OnInitializedAsync()
+    {
+        pendingSignUps = await CustomerService.GetPendingSignUps();
+    }
+
+    private async Task ApproveSignUp(int id)
+    {
+        await CustomerService.ApproveSignUp(id);
+        await OnInitializedAsync(); // Refresh pending sign-ups list
+    }
+
+    private async Task RejectSignUp(int id)
+    {
+        await CustomerService.RejectSignUp(id);
+        await OnInitializedAsync();
+    }
+
+    public class PendingSignUpModel
+    {
+        public int? Id { get; set; }
+        public string? Name { get; set; }
+        public string? Company { get; set; }
+        public string? Username { get; set; }
+    }
+}
+

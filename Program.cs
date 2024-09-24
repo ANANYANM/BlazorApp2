@@ -11,6 +11,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<TicketService>();
 builder.Services.AddSingleton<GlobalVariables>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<CustomerService>();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddAuthorization();

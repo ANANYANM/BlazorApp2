@@ -1,0 +1,53 @@
+﻿@page "/customer-signup"
+@using BlazorApp2.Models
+@using BlazorApp2.Services
+@inject CustomerService CustomerService
+@inject NavigationManager NavigationManager
+@using BlazorApp2
+@using BlazorApp2.Components
+@rendermode InteractiveServer
+
+<h3>Customer Sign Up</h3>
+
+<div>
+    <label>Name:</label>
+    <input type="text" @bind="customerSignUpModel.Name" />
+</div>
+<div>
+    <label>Company:</label>
+    <input type="text" @bind="customerSignUpModel.Company" />
+</div>
+<div>
+    <label>Username:</label>
+    <input type="text" @bind="customerSignUpModel.Username" />
+</div>
+<div>
+    <label>Password:</label>
+    <input type="password" @bind="customerSignUpModel.Password" />
+</div>
+
+<button class="btn btn-primary" @onclick="SubmitSignUp">Sign Up</button>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+@code {
+    private CustomerSignUpModel customerSignUpModel = new CustomerSignUpModel();
+    private string errorMessage;
+
+    private async Task SubmitSignUp()
+    {
+        try
+        {
+            // Directly pass the customerSignUpModel to the service method
+            await CustomerService.SubmitSignUpRequest(customerSignUpModel);
+            NavigationManager.NavigateTo("/confirmation-page");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An error occurred: {ex.Message}";
+        }
+    }
+}
