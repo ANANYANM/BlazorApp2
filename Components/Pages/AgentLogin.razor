@@ -28,10 +28,10 @@
     string password = "";
 
 
-    private void checkLogin()
+    private async void checkLogin()
     {
         //if (username == "agent1" && password == "password" || username == "agent2" && password == "password" || username == "agent3" && password == "password")
-        var user = UserService.AuthenticateUser(username, password);
+        var user = await UserService.AuthenticateUser(username, password);
 
         if (user != null && user.Role == "agent" )
         {

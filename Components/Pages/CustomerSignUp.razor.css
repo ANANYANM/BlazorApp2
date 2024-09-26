@@ -1,0 +1,58 @@
+﻿/* Style the form container */
+div {
+    margin: 15px 0;
+    font-size: 16px;
+}
+
+/* Label styling */
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Input fields styling */
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 20px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+/* Button styling */
+button {
+    background-color: #1B6EC2;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+    margin: 20px 0;
+}
+
+/* Error message styling */
+.alert {
+    padding: 10px;
+    color: white;
+    margin: 20px 0;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.alert-danger {
+    background-color: #f44336;
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 600px) {
+    input[type="text"], input[type="password"], button {
+        width: 100%;
+        font-size: 16px;
+    }
+}

@@ -31,7 +31,7 @@
     private async Task checkLogin()
     {
         //if (username == "admin" && password == "password")
-        var user = UserService.AuthenticateUser(username, password);
+        var user = await UserService.AuthenticateUser(username, password);
 
         if (user != null && user.Role == "admin")
         {

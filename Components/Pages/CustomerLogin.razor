@@ -30,7 +30,7 @@
     {
         //if (username == "customer" && password == "password")
         // enabling this to access view tickets page
-        var user = UserService.AuthenticateUser(username, password);
+        var user = await UserService.AuthenticateUser(username, password);
 
         if (user != null && user.Role == "customer")
         {

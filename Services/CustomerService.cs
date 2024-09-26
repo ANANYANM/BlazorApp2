@@ -1,5 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.Scripting;
-using  BlazorApp2.Components;
+using BlazorApp2.Components;
 using BlazorApp2.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -47,8 +47,8 @@ public class CustomerService
         {
             var user = new User
             {
-                Name = signUp.Name,
-                Company = signUp.Company,
+                //Name = signUp.Name,
+                //Company = signUp.Company,
                 Username = signUp.Username,
                 Password = signUp.Password
             };
