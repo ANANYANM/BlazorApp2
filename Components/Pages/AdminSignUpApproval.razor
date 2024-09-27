@@ -28,8 +28,8 @@
                     <td>@signUp.Company</td>
                     <td>@signUp.Username</td>
                     <td>
-                        <button @onclick="() => ApproveSignUp(signUp.Id)">Approve</button>
-                        <button @onclick="() => RejectSignUp(signUp.Id)">Reject</button>
+                        <button @onclick=" () => ApproveSignUp(signUp.Id)">Approve</button>
+                        <button @onclick=" () => RejectSignUp(signUp.Id)">Reject</button>
                     </td>
                 </tr>
             }
@@ -39,6 +39,7 @@
 
 @code {
     private List<PendingSignUp> pendingSignUps;
+    private string errorMessage;
 
     protected override async Task OnInitializedAsync()
     {
@@ -48,13 +49,17 @@
     private async Task ApproveSignUp(int id)
     {
         await CustomerService.ApproveSignUp(id);
+        pendingSignUps = await CustomerService.GetPendingSignUps();
         await OnInitializedAsync(); // Refresh pending sign-ups list
+        errorMessage = "Aprroved";
     }
 
     private async Task RejectSignUp(int id)
     {
         await CustomerService.RejectSignUp(id);
+        pendingSignUps = await CustomerService.GetPendingSignUps();
         await OnInitializedAsync();
+        errorMessage = "Rejected";
     }
 
     public class PendingSignUpModel

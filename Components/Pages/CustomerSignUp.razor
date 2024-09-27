@@ -48,6 +48,10 @@
         catch (Exception ex)
         {
             errorMessage = $"An error occurred: {ex.Message}";
+            if (ex.InnerException != null)
+            {
+                errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+            }
         }
     }
 }

@@ -47,10 +47,10 @@ public class CustomerService
         {
             var user = new User
             {
-                //Name = signUp.Name,
-                //Company = signUp.Company,
+                Name = signUp.Name,
+                Company = signUp.Company,
                 Username = signUp.Username,
-                Password = signUp.Password
+                Password = BCrypt.Net.BCrypt.HashPassword(signUp.Password)
             };
             _context.Users.Add(user);
             _context.PendingSignUps.Remove(signUp); // Remove from pending sign-ups
