@@ -8,7 +8,7 @@ namespace BlazorApp2.Services
 
         public List<Ticket> GetTickets()
         {
-            return tickets;
+           return tickets;
         }
 
         public void AddTicket(Ticket ticket)

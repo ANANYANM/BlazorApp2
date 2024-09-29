@@ -48,18 +48,34 @@
 
     private async Task ApproveSignUp(int id)
     {
-        await CustomerService.ApproveSignUp(id);
-        pendingSignUps = await CustomerService.GetPendingSignUps();
-        await OnInitializedAsync(); // Refresh pending sign-ups list
-        errorMessage = "Aprroved";
+        try
+        {
+            await CustomerService.ApproveSignUp(id);
+            pendingSignUps = await CustomerService.GetPendingSignUps();
+            //await OnInitializedAsync(); // Refresh pending sign-ups list
+            errorMessage = "Aprroved";
+            NavigationManager.NavigateTo("/customer-login");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error approving sign-up: {ex.Message}";
+        }
     }
 
     private async Task RejectSignUp(int id)
     {
-        await CustomerService.RejectSignUp(id);
-        pendingSignUps = await CustomerService.GetPendingSignUps();
-        await OnInitializedAsync();
-        errorMessage = "Rejected";
+        try
+        {
+            await CustomerService.RejectSignUp(id);
+            pendingSignUps = await CustomerService.GetPendingSignUps();
+            //await OnInitializedAsync();
+            errorMessage = "Rejected";
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error rejecting sign-up: {ex.Message}";
+        }
+
     }
 
     public class PendingSignUpModel

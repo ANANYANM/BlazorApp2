@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 namespace BlazorApp2.Services;
+
 public class CustomerService
 {
     private TicketContext _context;
@@ -42,19 +43,28 @@ public class CustomerService
 
     public async Task ApproveSignUp(int id)
     {
-        var signUp = await _context.PendingSignUps.FindAsync(id);
-        if (signUp != null)
+        try
         {
-            var user = new User
+            var signUp = await _context.PendingSignUps.FindAsync(id);
+            if (signUp != null)
             {
-                Name = signUp.Name,
-                Company = signUp.Company,
-                Username = signUp.Username,
-                Password = BCrypt.Net.BCrypt.HashPassword(signUp.Password)
-            };
-            _context.Users.Add(user);
-            _context.PendingSignUps.Remove(signUp); // Remove from pending sign-ups
-            await _context.SaveChangesAsync();
+                var user = new User
+                {
+                    Name = signUp.Name,
+                    Company = signUp.Company,
+                    Username = signUp.Username,
+                    Password = signUp.Password,
+                    Role = "customer"
+                };
+                _context.Users.Add(user);
+                _context.PendingSignUps.Remove(signUp); // Remove from pending sign-ups
+                await _context.SaveChangesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log the exception or throw it to the caller
+            throw new Exception($"Error approving sign-up with id {id}: {ex.Message}");
         }
     }
 
