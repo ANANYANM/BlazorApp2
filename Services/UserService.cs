@@ -13,6 +13,12 @@ namespace BlazorApp2.Services
         {
             _dbContext = dbContext;
         }
+
+        public TicketContext Get_dbContext()
+        {
+            return _dbContext;
+        }
+
         //    private List<User> Users = new List<User>
         //{
         //    new User { Username = "admin", PasswordHash = "password", Role = "admin" },
@@ -25,9 +31,9 @@ namespace BlazorApp2.Services
         // Fetch users from the database based on username and password
         public async Task<User> AuthenticateUser(string username, string password)
         {
-            //return Users.FirstOrDefault(u => u.Username == username && u.Password == password);
+            // return Users.FirstOrDefault(u => u.Username == username && u.Password == password);
             return await _dbContext.Users
-                .FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+            .FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
         }
     }
 }
