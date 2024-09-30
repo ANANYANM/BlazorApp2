@@ -9,8 +9,8 @@ namespace BlazorApp2.Models
         public string Username { get; set; }
         public string Password { get; set; }
         public string Role { get; set; } // Roles could be "Admin", "Agent", or "Customer"
-        public string Name { get; set; }
-        public string Company { get; set; }
+        public string? Name { get; set; }
+        public string? Company { get; set; }
     }
 
 }
