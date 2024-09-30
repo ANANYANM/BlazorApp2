@@ -8,7 +8,7 @@ namespace BlazorApp2.Services;
 
 public class CustomerService
 {
-    private TicketContext _context;
+    private readonly TicketContext _context;
 
     public CustomerService(TicketContext context)
     {

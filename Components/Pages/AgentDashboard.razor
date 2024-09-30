@@ -91,17 +91,17 @@ else
 }
 
 @code {
-    private List<Ticket> assignedTickets;
-    private Ticket selectedTicket;
-    private string errorMessage;
-    private string currentAgent;
+    private List<Ticket>? assignedTickets;
+    private Ticket? selectedTicket;
+    private string? errorMessage;
+    //private string? currentAgent;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         // Check if the user is an authenticated agent
         if (GlobalVariables.isAgent && !string.IsNullOrEmpty(GlobalVariables.CurrentAgentName))
         {  
-            LoadAssignedTickets();
+             LoadAssignedTickets();
         }
         else
         {

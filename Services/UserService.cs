@@ -6,7 +6,7 @@ namespace BlazorApp2.Services
 {
     public class UserService
     {
-        private TicketContext _dbContext;
+        private readonly TicketContext _dbContext;
 
         // Inject the database context through the constructor
         public UserService(TicketContext dbContext)
@@ -29,7 +29,7 @@ namespace BlazorApp2.Services
         //};
 
         // Fetch users from the database based on username and password
-        public async Task<User> AuthenticateUser(string username, string password)
+        public async Task<User?> AuthenticateUser(string username, string password)
         {
             // return Users.FirstOrDefault(u => u.Username == username && u.Password == password);
             return await _dbContext.Users

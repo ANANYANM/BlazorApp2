@@ -4,7 +4,6 @@ using Microsoft.Azure.Documents;
 using Microsoft.EntityFrameworkCore;
 namespace BlazorApp2.Models;
 
-
 public partial class TicketContext : DbContext
 {
     public TicketContext(DbContextOptions<TicketContext> options)

@@ -58,11 +58,11 @@
 @code {
     private Ticket newTicket = new Ticket();
     private List<Ticket> tickets = new List<Ticket>();
-    private string errorMessage;
-    private string username;
-    private string password;
+    private string? errorMessage;
+    //private string? username;
+    //private string? password;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
 
         if (GlobalVariables.isCustomer == true)
