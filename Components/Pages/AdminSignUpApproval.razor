@@ -52,9 +52,8 @@
         {
             await CustomerService.ApproveSignUp(id);
             pendingSignUps = await CustomerService.GetPendingSignUps();
-            //await OnInitializedAsync(); // Refresh pending sign-ups list
-            errorMessage = "Aprroved";
-            NavigationManager.NavigateTo("/customer-login");
+           // await OnInitializedAsync(); // Refresh pending sign-ups list
+            NavigationManager.NavigateTo("/customer-login", forceLoad: true);
         }
         catch (Exception ex)
         {
@@ -69,7 +68,6 @@
             await CustomerService.RejectSignUp(id);
             pendingSignUps = await CustomerService.GetPendingSignUps();
             //await OnInitializedAsync();
-            errorMessage = "Rejected";
         }
         catch (Exception ex)
         {

@@ -53,8 +53,7 @@ public class CustomerService
                     Name = signUp.Name,
                     Company = signUp.Company,
                     Username = signUp.Username,
-                    Password = signUp.Password,
-                    Role = "customer"
+                    Password = signUp.Password
                 };
                 _context.Users.Add(user);
                 _context.PendingSignUps.Remove(signUp); // Remove from pending sign-ups
