@@ -11,6 +11,7 @@ namespace BlazorApp2.Models
         public string? Role { get; set; } // Roles could be "Admin", "Agent", or "Customer"
         public string? Name { get; set; }
         public string? Company { get; set; }
+        public string? IsApproved { get; set; }
     }
 
 }
