@@ -33,7 +33,7 @@ namespace BlazorApp2.Services
         {
             // return Users.FirstOrDefault(u => u.Username == username && u.Password == password);
             return await _dbContext.Users
-            .FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+            .FirstOrDefaultAsync(u => u.Username == username && u.Password == password && u.IsApproved == true);
         }
     }
 }

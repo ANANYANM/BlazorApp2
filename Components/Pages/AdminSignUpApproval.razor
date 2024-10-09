@@ -6,7 +6,6 @@
 @using BlazorApp2
 @using BlazorApp2.Components
 @rendermode InteractiveServer
-
 <h3>Pending Sign-Ups</h3>
 
 @if (pendingSignUps != null)
@@ -17,6 +16,7 @@
                 <th>Name</th>
                 <th>Company</th>
                 <th>Username</th>
+                <th>Role</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -28,7 +28,14 @@
                     <td>@signUp.Company</td>
                     <td>@signUp.Username</td>
                     <td>
-                        <button @onclick=" () => ApproveSignUp(signUp.Id)">Approve</button>
+                        <select @bind="signUp.Role">
+                            <option value="customer">customer</option>
+                            <option value="agent">agent</option>
+                            <option vaalue="admin">admin</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button @onclick=" () => ApproveSignUp(signUp.Id,signUp.Role)">Approve</button>
                         <button @onclick=" () => RejectSignUp(signUp.Id)">Reject</button>
                     </td>
                 </tr>
@@ -46,18 +53,31 @@
         pendingSignUps = await CustomerService.GetPendingSignUps();
     }
 
-    private async Task ApproveSignUp(int id)
+    private async Task ApproveSignUp(int id,string role)
     {
         try
         {
-            await CustomerService.ApproveSignUp(id);
+            await CustomerService.ApproveSignUp(id,role);
             pendingSignUps = await CustomerService.GetPendingSignUps();
-           // await OnInitializedAsync(); // Refresh pending sign-ups list
-            NavigationManager.NavigateTo("/customer-login", forceLoad: true);
+            // await OnInitializedAsync(); // Refresh pending sign-ups list
+           //NavigationManager.NavigateTo("/customer-login", forceLoad: true);
+            @*if (role == "customer") // Corrected syntax
+            {
+                NavigationManager.NavigateTo("/customer-login", forceLoad: true);
+            }
+            else if (role == "agent") // Added an else-if for agent
+            {
+                NavigationManager.NavigateTo("/agent-login", forceLoad: true);
+            }
+            else
+            {
+                // Handle admin or any other roles if necessary
+                NavigationManager.NavigateTo("/admin-login", forceLoad: true);
+            }*@
         }
         catch (Exception ex)
         {
-            errorMessage = $"Error approving sign-up: {ex.Message}";
+            errorMessage = $"Error approving sign-up: {ex.Message}. Inner exception: {ex.InnerException?.Message}";
         }
     }
 
@@ -82,6 +102,8 @@
         public string? Name { get; set; }
         public string? Company { get; set; }
         public string? Username { get; set; }
+        public string? Role { get; set; }
+        public bool IsApproved { get; set; }
     }
 }
 

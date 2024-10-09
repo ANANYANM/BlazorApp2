@@ -4,6 +4,8 @@ using BlazorApp2.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using System.Data;
 namespace BlazorApp2.Services;
 
 public class CustomerService
@@ -15,14 +17,15 @@ public class CustomerService
         _context = context;
     }
 
-    public async Task SubmitSignUpRequest(CustomerSignUpModel model)
+    public async Task SubmitSignUpRequest(CustomerSignUpModel model,string role)
     {
         var pendingSignUp = new PendingSignUp
         {
             Name = model.Name,
             Company = model.Company,
             Username = model.Username,
-            Password = BCrypt.Net.BCrypt.HashPassword(model.Password)
+            Password = BCrypt.Net.BCrypt.HashPassword(model.Password),
+            Role = role
         };
         _context.PendingSignUps.Add(pendingSignUp);
         await _context.SaveChangesAsync();
@@ -41,7 +44,7 @@ public class CustomerService
             }).ToListAsync();
     }
 
-    public async Task ApproveSignUp(int id)
+    public async Task ApproveSignUp(int id,string role)
     {
         try
         {
@@ -53,7 +56,8 @@ public class CustomerService
                     Name = signUp.Name,
                     Company = signUp.Company,
                     Username = signUp.Username,
-                    Password = signUp.Password      
+                    Password = signUp.Password,
+                    Role = role
                 };
                 _context.Users.Add(user);
                 _context.PendingSignUps.Remove(signUp); // Remove from pending sign-ups
@@ -63,7 +67,7 @@ public class CustomerService
         catch (Exception ex)
         {
             // Log the exception or throw it to the caller
-            throw new Exception($"Error approving sign-up with id {id}: {ex.Message}");
+            throw new Exception($"Error approving sign-up: {ex.Message}");
         }
     }
 
