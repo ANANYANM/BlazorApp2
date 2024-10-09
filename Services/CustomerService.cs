@@ -24,7 +24,7 @@ public class CustomerService
             Name = model.Name,
             Company = model.Company,
             Username = model.Username,
-            Password = BCrypt.Net.BCrypt.HashPassword(model.Password),
+            Password = model.Password,
             Role = role
         };
         _context.PendingSignUps.Add(pendingSignUp);
@@ -40,7 +40,8 @@ public class CustomerService
                 Id = s.Id,
                 Name = s.Name,
                 Company = s.Company,
-                Username = s.Username
+                Username = s.Username,
+                Role=s.Role
             }).ToListAsync();
     }
 

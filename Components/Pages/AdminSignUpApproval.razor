@@ -27,13 +27,7 @@
                     <td>@signUp.Name</td>
                     <td>@signUp.Company</td>
                     <td>@signUp.Username</td>
-                    <td>
-                        <select @bind="signUp.Role">
-                            <option value="customer">customer</option>
-                            <option value="agent">agent</option>
-                            <option value="admin">admin</option>
-                        </select>
-                    </td>
+                    <td> @signUp.Role</td>
                     <td>
                         <button @onclick=" () => ApproveSignUp(signUp.Id,signUp.Role)">Approve</button>
                         <button @onclick=" () => RejectSignUp(signUp.Id)">Reject</button>
