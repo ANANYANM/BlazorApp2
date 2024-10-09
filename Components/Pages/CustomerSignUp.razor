@@ -42,7 +42,7 @@
         try
         {
             // Directly pass the customerSignUpModel to the service method
-            await CustomerService.SubmitSignUpRequest(customerSignUpModel);
+            await CustomerService.SubmitSignUpRequest(customerSignUpModel,"customer");
             NavigationManager.NavigateTo("/confirmation-page");
         }
         catch (Exception ex)

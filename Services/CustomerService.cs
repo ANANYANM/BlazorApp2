@@ -17,7 +17,7 @@ public class CustomerService
         _context = context;
     }
 
-    public async Task SubmitSignUpRequest(CustomerSignUpModel model,string role)
+    public async Task SubmitSignUpRequest(CustomerSignUpModel model,string role="customer")
     {
         var pendingSignUp = new PendingSignUp
         {
