@@ -1,0 +1,65 @@
+﻿@page "/agent-list"
+@inject UserService UserService
+@using BlazorApp2
+@using BlazorApp2.Models
+@using BlazorApp2.Services
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+@inject TicketContext _context
+
+<h3>Agent List</h3>
+
+@if (agents == null)
+{
+    <p>Loading agents...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>UserId</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>IsApproved</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var agent in agents)
+            {
+                <tr>
+                    <td>@agent.UserId</td>
+                    <td>@agent.Name</td>
+                    <td>@agent.Username</td>
+                    <td>@agent.IsApproved ? "Yes" : "No"</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<User> agents;
+
+    public AgentList(List<User> agents)
+    {
+        this.agents = agents;
+    }
+
+    // No need for a constructor, use lifecycle methods instead
+    protected override async Task OnInitializedAsync()
+    {
+        // Only see the agents list if the user is an admin
+        if (GlobalVariables.isAdmin)
+        {
+            await GetAgentsAsync();
+        }
+    }
+
+    private async Task GetAgentsAsync()
+    {
+        // Fetch agents asynchronously from the UserService
+       agents = await UserService.GetAgentsAsync();
+    }
+}
+

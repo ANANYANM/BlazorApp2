@@ -35,5 +35,9 @@ namespace BlazorApp2.Services
             return await _dbContext.Users
             .FirstOrDefaultAsync(u => u.Username == username && u.Password == password && u.IsApproved == true);
         }
+        public async Task<List<User>> GetAgentsAsync()
+        {
+            return await _dbContext.Users.Where(u => u.Role == "Agent").ToListAsync();
+        }
     }
 }
