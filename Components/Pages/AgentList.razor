@@ -6,6 +6,7 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 @inject TicketContext _context
+@inject IJSRuntime JSRuntime
 
 <h3>Agent List</h3>
 
@@ -21,7 +22,7 @@ else
                 <th>UserId</th>
                 <th>Name</th>
                 <th>Username</th>
-                <th>IsApproved</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -31,7 +32,10 @@ else
                     <td>@agent.UserId</td>
                     <td>@agent.Name</td>
                     <td>@agent.Username</td>
-                    <td>@agent.IsApproved ? "Yes" : "No"</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => EditAgent(agent.UserId)">Edit</button>
+                        <button class="btn btn-danger" @onclick="() => DeleteAgent(agent.UserId)">Delete</button>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -41,25 +45,34 @@ else
 @code {
     private List<User> agents;
 
-    public AgentList(List<User> agents)
-    {
-        this.agents = agents;
-    }
 
     // No need for a constructor, use lifecycle methods instead
     protected override async Task OnInitializedAsync()
     {
-        // Only see the agents list if the user is an admin
-        if (GlobalVariables.isAdmin)
-        {
-            await GetAgentsAsync();
-        }
+        await GetAgentsAsync();
     }
 
     private async Task GetAgentsAsync()
     {
         // Fetch agents asynchronously from the UserService
-       agents = await UserService.GetAgentsAsync();
+        agents = await UserService.GetAgentsAsync();
+    }
+
+    private void EditAgent(int userId)
+    {
+        // Navigate to the edit page for the selected agent (you can create a separate page for this)
+        NavigationManager.NavigateTo($"/edit-agent/{userId}");
+    }
+
+    private async Task DeleteAgent(int userId)
+    {
+        // Confirm deletion and then remove the agent
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("window.confirm",new[] { "Are you sure you want to delete this agent?" });
+        if (confirmed)
+        {
+            await UserService.DeleteAgentAsync(userId);
+            await GetAgentsAsync(); // Refresh the list after deletion
+        }
     }
 }
 

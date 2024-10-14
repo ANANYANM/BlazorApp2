@@ -1,0 +1,48 @@
+﻿@page "/edit-agent/{userId:int}"
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<h3>Edit Agent</h3>
+
+@if (agent == null)
+{
+    <p>Loading agent details...</p>
+}
+else
+{
+        <div class="mb-3">
+            <label for="name::">Name</label>
+            <input type="text" id="name" @bind="agent.Name" />
+        </div>
+
+        <div class="mb-3">
+            <label for="username::">Username</label>
+            <input type="text" id="username" @bind="agent.Username" />
+        </div>
+
+        <button type="submit" class="btn btn-primary"@onclick="HandleValidSubmit">Save</button>
+        <button type="button" class="btn btn-secondary" @onclick="GoBack">Cancel</button>
+    
+}
+
+@code {
+    [Parameter] public int userId { get; set; }
+    private User agent;
+    protected override async Task OnInitializedAsync()
+    {
+        agent = await UserService.GetAgentByIdAsync(userId);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        // Save the updated agent details
+        await UserService.UpdateAgentAsync(agent);
+        NavigationManager.NavigateTo("/agent-list");
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/agent-list");
+    }
+}

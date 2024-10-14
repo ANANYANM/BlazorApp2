@@ -39,5 +39,28 @@ namespace BlazorApp2.Services
         {
             return await _dbContext.Users.Where(u => u.Role == "Agent").ToListAsync();
         }
+        public async Task DeleteAgentAsync(int userId)
+        {
+            // Find the agent in the database by userId
+            var agent = await _dbContext.Users.FindAsync(userId);
+            if (agent != null)
+            {
+                // Remove the agent and save changes
+                _dbContext.Users.Remove(agent);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+        public async Task UpdateAgentAsync(User agent)
+        {
+            // Update the agent in the database
+            _dbContext.Users.Update(agent);
+            await _dbContext.SaveChangesAsync();
+        }
+        public async Task<User?> GetAgentByIdAsync(int userId)
+        {
+            // Fetch the agent by userId from the database
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+        }
+
     }
 }
