@@ -4,15 +4,9 @@ using System;
 using System.Threading.Tasks;
 namespace BlazorApp2.Services
 {
-    public class UserService
+    public class UserService(TicketContext dbContext)
     {
-        private readonly TicketContext _dbContext;
-
-        // Inject the database context through the constructor
-        public UserService(TicketContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        private readonly TicketContext _dbContext = dbContext;
 
         public TicketContext Get_dbContext()
         {

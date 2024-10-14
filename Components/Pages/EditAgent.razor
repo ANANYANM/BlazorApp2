@@ -28,7 +28,7 @@ else
 
 @code {
     [Parameter] public int userId { get; set; }
-    private User agent;
+    private User? agent;
     protected override async Task OnInitializedAsync()
     {
         agent = await UserService.GetAgentByIdAsync(userId);
@@ -36,6 +36,11 @@ else
 
     private async Task HandleValidSubmit()
     {
+        if (agent == null)
+        {
+            // Handle the case where agent is null, e.g., log the error or show a message to the user
+            throw new InvalidOperationException("Agent details are missing.");
+        }
         // Save the updated agent details
         await UserService.UpdateAgentAsync(agent);
         NavigationManager.NavigateTo("/agent-list");
