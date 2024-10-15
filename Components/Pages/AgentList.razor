@@ -14,6 +14,10 @@
 {
     <p>Loading agents...</p>
 }
+else if (agents.Count == 0)
+{
+    <p>No agents found.</p>
+}
 else
 {
     <table class="table">
@@ -22,19 +26,21 @@ else
                 <th>UserId</th>
                 <th>Name</th>
                 <th>Username</th>
+                <th>IsActive</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var agent in agents)
             {
-                <tr>
+                <tr class="@((agent.IsActive ? "" : "table-danger"))"><!-- Conditionally change row style -->
                     <td>@agent.UserId</td>
                     <td>@agent.Name</td>
                     <td>@agent.Username</td>
+                    <td>@(agent.IsActive ? "Active" : "Inactive")</td> <!-- Display active/inactive status -->
                     <td>
                         <button class="btn btn-primary" @onclick="() => EditAgent(agent.UserId)">Edit</button>
-                        <button class="btn btn-danger" @onclick="() => DeleteAgent(agent.UserId)">Delete</button>
+                        <button class="btn btn-danger" @onclick="() => ToggleAgentStatus(agent.UserId)">@(agent.IsActive ? "Deactivate" : "Activate")</button><!-- Change button label -->
                     </td>
                 </tr>
             }
@@ -64,13 +70,13 @@ else
         NavigationManager.NavigateTo($"/edit-agent/{userId}");
     }
 
-    private async Task DeleteAgent(int userId)
+    private async Task ToggleAgentStatus(int userId)
     {
         // Confirm deletion and then remove the agent
-        bool confirmed = await JSRuntime.InvokeAsync<bool>("window.confirm",new[] { "Are you sure you want to delete this agent?" });
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("window.confirm", new[] { "Are you sure you want to change the status of this agent?" });
         if (confirmed)
         {
-            await UserService.DeleteAgentAsync(userId);
+            await UserService.ToggleAgentStatusAsync(userId);
             await GetAgentsAsync(); // Refresh the list after deletion
         }
     }
