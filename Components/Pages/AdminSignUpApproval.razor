@@ -8,6 +8,12 @@
 @rendermode InteractiveServer
 <h3>Pending Sign-Ups</h3>
 
+@if (!GlobalVariables.isAdmin)
+{
+    <p>You do not have permission to view this page.</p>
+}
+else
+{
 @if (pendingSignUps != null)
 {
     <table>
@@ -37,7 +43,7 @@
         </tbody>
     </table>
 }
-
+}
 @code {
     private List<PendingSignUp>? pendingSignUps;
     private string? errorMessage;

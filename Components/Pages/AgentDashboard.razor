@@ -81,7 +81,18 @@ else
             <label>Status:</label>
             <input type="Text" @bind="selectedTicket.Status" />
         </div>
+        <!-- Dropdown for redirecting the ticket -->
+        <div>
+            <label>Redirect to:</label>
+            <select @bind="selectedAgent">
+                <option value="">Select Agent</option>
+                <option value="agent1">agent1</option>
+                <option value="agent2">agent2</option>
+                <option value="agent3">agent3</option>
+            </select>
+        </div>
         <button class="btn btn-success" @onclick="UpdateTicketStatus">Update Status</button>
+        <button class="btn btn-warning" @onclick="RedirectTicket">Redirect Ticket</button>
     </div>
 }
 
@@ -94,6 +105,8 @@ else
     private List<Ticket>? assignedTickets;
     private Ticket? selectedTicket;
     private string? errorMessage;
+    private string? selectedAgent;
+    private List<User> agents = new List<User>();
 
     protected override void OnInitialized()
     {
@@ -101,6 +114,7 @@ else
         if (GlobalVariables.isAgent && !string.IsNullOrEmpty(GlobalVariables.CurrentAgentName))
         {  
              LoadAssignedTickets();
+            LoadAgents(); // Load available agents for redirection
         }
         else
         {
@@ -118,6 +132,18 @@ else
         catch(Exception ex)
         {
             errorMessage = "An error occurred while loading tickets: " + ex.Message;
+        }
+    }
+    private void LoadAgents()
+    {
+        try
+        {
+            // Fetch all agents for the dropdown
+            agents = _context.Users.ToList(); // Ensure you have an Agents DbSet in your context
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while loading agents: " + ex.Message;
         }
     }
     private void SelectTicket(Ticket ticket)
@@ -143,6 +169,29 @@ else
             catch(Exception ex)
             {
                 errorMessage = "Failed to update ticket status: " + ex.Message;
+            }
+        }
+    }
+    private async Task RedirectTicket()
+    {
+        if (selectedTicket != null && !string.IsNullOrEmpty(selectedAgent))
+        {
+            try
+            {
+                // Redirect ticket to the selected agent
+                var ticketToRedirect = await _context.Tickets.FindAsync(selectedTicket.TicketId);
+                if (ticketToRedirect != null)
+                {
+                    ticketToRedirect.AssignTo = selectedAgent; // Update the agent assignment
+                    await _context.SaveChangesAsync();  // Persist changes to the database
+                }
+                LoadAssignedTickets(); // Refresh the list to reflect changes
+                selectedTicket = null; // Clear the selection after redirection
+                selectedAgent = null; // Reset the selected agent
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Failed to redirect ticket: " + ex.Message;
             }
         }
     }
