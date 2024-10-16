@@ -28,7 +28,6 @@
 
     private async Task checkLogin()
     {
-        //if (username == "customer" && password == "password")
         // enabling this to access view tickets page
         var user = await UserService.AuthenticateUser(username, password);
 

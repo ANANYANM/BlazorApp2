@@ -53,21 +53,6 @@
         {
             await CustomerService.ApproveSignUp(id,role);
             pendingSignUps = await CustomerService.GetPendingSignUps();
-            // await OnInitializedAsync(); // Refresh pending sign-ups list
-           //NavigationManager.NavigateTo("/customer-login", forceLoad: true);
-            @*if (role == "customer") // Corrected syntax
-            {
-                NavigationManager.NavigateTo("/customer-login", forceLoad: true);
-            }
-            else if (role == "agent") // Added an else-if for agent
-            {
-                NavigationManager.NavigateTo("/agent-login", forceLoad: true);
-            }
-            else
-            {
-                // Handle admin or any other roles if necessary
-                NavigationManager.NavigateTo("/admin-login", forceLoad: true);
-            }*@
         }
         catch (Exception ex)
         {
@@ -81,7 +66,6 @@
         {
             await CustomerService.RejectSignUp(id);
             pendingSignUps = await CustomerService.GetPendingSignUps();
-            //await OnInitializedAsync();
         }
         catch (Exception ex)
         {

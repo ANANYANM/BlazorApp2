@@ -94,7 +94,6 @@ else
     private List<Ticket>? assignedTickets;
     private Ticket? selectedTicket;
     private string? errorMessage;
-    //private string? currentAgent;
 
     protected override void OnInitialized()
     {
@@ -113,8 +112,6 @@ else
     {
         try{
             // Fetch tickets assigned to the current agent
-      
-            //assignedTickets = TicketService.GetTickets()
              assignedTickets =_context.Tickets
             .Where(t => t.AssignTo == GlobalVariables.CurrentAgentName).ToList();
         }
@@ -133,7 +130,6 @@ else
         if (selectedTicket != null && !string.IsNullOrWhiteSpace(selectedTicket.Status))
         {
             try {
-                //TicketService.UpdateTicket(selectedTicket); // Update the ticket using the service method
                 // Update ticket status in the database
                 var ticketToUpdate = await _context.Tickets.FindAsync(selectedTicket.TicketId);
                 if (ticketToUpdate != null)

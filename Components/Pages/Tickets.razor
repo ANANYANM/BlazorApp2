@@ -59,15 +59,12 @@
     private Ticket newTicket = new Ticket();
     private List<Ticket> tickets = new List<Ticket>();
     private string? errorMessage;
-    //private string? username;
-    //private string? password;
 
     protected override void OnInitialized()
     {
 
         if (GlobalVariables.isCustomer == true)
         {
-            //tickets = TicketService.GetTickets();
             tickets = _context.Tickets.ToList();
 
         }
@@ -79,8 +76,6 @@
     private async void CreateTicket()
     {
         try{
-            //TicketService.AddTicket(newTicket);
-            //tickets = TicketService.GetTickets(); // Refresh the ticket list
              _context.Tickets.Add(newTicket);
             await  _context.SaveChangesAsync();
              tickets =  _context.Tickets.ToList();//Refresh the ticket list
