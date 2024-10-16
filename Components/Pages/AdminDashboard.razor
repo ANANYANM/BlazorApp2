@@ -1,0 +1,20 @@
+﻿@page "/admin_dashboard"
+@inject NavigationManager NavigationManager
+@using BlazorApp2.Models
+@using BlazorApp2.Services
+@inject TicketService TicketService
+@rendermode InteractiveServer
+
+<h3>Admin Dashboard</h3>
+
+    <button @onclick="@(() => NavigationManager.NavigateTo("/view-tickets"))">View Tickets</button>
+    <button @onclick="@(() => NavigationManager.NavigateTo("/agent-list"))">Agent List</button>
+<button class="btn btn-primary" @onclick="Logout">Logout</button>
+
+@code {
+    private void Logout()
+    {
+        GlobalVariables.isAdmin = false;
+        NavigationManager.NavigateTo("/admin-login");
+    }
+}

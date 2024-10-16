@@ -9,7 +9,12 @@
 @inject IJSRuntime JSRuntime
 
 <h3>Agent List</h3>
-
+@if (!GlobalVariables.isAdmin)
+{
+    <p>You do not have permission to view this page.</p>
+}
+else
+{
 @if (agents == null)
 {
     <p>Loading agents...</p>
@@ -47,7 +52,7 @@ else
         </tbody>
     </table>
 }
-
+}
 @code {
     private List<User>? agents;
 

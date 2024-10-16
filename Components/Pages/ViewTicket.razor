@@ -8,7 +8,12 @@
 @inject TicketContext _context
 
 <h3>View Tickets</h3>
-
+@if (!GlobalVariables.isAdmin)
+{
+    <p>You do not have permission to view this page.</p>
+}
+else
+{
 @if (tickets == null)
 {
     <p>Loading...</p>
@@ -69,6 +74,7 @@ else
             }
         </tbody>
     </table>
+}
 }
 @if (!string.IsNullOrEmpty(errorMessage))
 {

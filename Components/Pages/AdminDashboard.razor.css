@@ -1,0 +1,43 @@
+﻿/* Admin Dashboard CSS */
+
+h3 {
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+button {
+    display: inline-block;
+    background-color: #007bff; /* Primary blue color */
+    color: white;
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    button:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
+
+    button:focus {
+        outline: none;
+        box-shadow: 0 0 5px #0056b3;
+    }
+
+    button.btn-primary {
+        background-color: #28a745; /* Green color for the Logout button */
+    }
+
+        button.btn-primary:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
