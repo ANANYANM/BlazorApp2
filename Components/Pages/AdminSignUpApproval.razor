@@ -35,8 +35,15 @@ else
                     <td>@signUp.Username</td>
                     <td> @signUp.Role</td>
                     <td>
-                        <button @onclick="() => ApproveSignUp(signUp.Id, signUp.Role)">Approve</button>
-                        <button @onclick=" () => RejectSignUp(signUp.Id)">Reject</button>
+                            @if (signUp.Role != null)
+                            {
+                                <button @onclick="() => ApproveSignUp(signUp.Id, signUp.Role)">Approve</button>
+                            }
+                            else
+                            {
+                                <p>Role is missing</p>
+                            }
+                        <button class="btn btn-danger" @onclick=" () => RejectSignUp(signUp.Id)">Reject</button>
                     </td>
                 </tr>
             }
@@ -44,6 +51,7 @@ else
     </table>
 }
 }
+<button class="btn btn-primary" @onclick="@(() => NavigationManager.NavigateTo("/admin_dashboard"))">AdminDashboard</button>
 @code {
     private List<PendingSignUp>? pendingSignUps;
     private string? errorMessage;

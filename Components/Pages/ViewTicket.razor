@@ -76,6 +76,7 @@ else
     </table>
 }
 }
+<button class="btn btn-primary" @onclick="@(() => NavigationManager.NavigateTo("/admin_dashboard"))">AdminDashboard</button>
 @if (!string.IsNullOrEmpty(errorMessage))
 {
     <p class="text-danger">@errorMessage</p>
