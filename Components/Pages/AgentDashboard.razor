@@ -1,1 +1,199 @@
-@page "/agent_dashboard"@using BlazorApp2.Models@using BlazorApp2.Services@inject TicketService TicketService@inject NavigationManager NavigationManager@rendermode InteractiveServer@inject TicketContext _context<h3>Agent Dashboard</h3>@if (assignedTickets == null){    <p>Loading assigned tickets...</p>}else if (assignedTickets.Count == 0){    <p>No tickets have been assigned to you.</p>}else{    <table class="table">        <thead>            <tr>                <th>TicketId</th>                <th>Title</th>                <th>CustomerName</th>                <th>Status</th>                <th>Action</th>            </tr>        </thead>        <tbody>            @foreach (var ticket in assignedTickets)            {                <tr>                    <td>@ticket.TicketId</td>                    <td>@ticket.Title</td>                    <td>@ticket.CustomerName</td>                    <td>@ticket.Status</td>                    <td>                        <button class="btn btn-info" @onclick="() => SelectTicket(ticket)">Review</button>                    </td>                </tr>            }        </tbody>    </table>}@if (selectedTicket != null){    <div class="ticket-details">        <h4>Review Ticket Details</h4>        <div>            <label>Ticket ID:</label>            <span>@selectedTicket.TicketId</span>        </div>        <div>            <label>Title:</label>            <span>@selectedTicket.Title</span>        </div>        <div>            <label>Customer Name:</label>            <span>@selectedTicket.CustomerName</span>        </div>        <div>            <label>Issue:</label>            <span>@selectedTicket.Issue</span>        </div>        <div>            <label>Company Name:</label>            <span>@selectedTicket.CompanyName</span>        </div>        <div>            <label>Issue Category:</label>            <span>@selectedTicket.IssueCategory</span>        </div>        <div>            <label>Description:</label>            <span>@selectedTicket.Description</span>        </div>        <div>            <label>Status:</label>            <input type="text" @bind="selectedTicket.Status" />        </div>        <!-- Dropdown for redirecting the ticket -->        <div>            <label>Redirect to:</label>            <select @bind="selectedAgent">                <option value="">Select Agent</option>                @foreach (var agent in agents)                {                    <option value="@agent.Username">@agent.Username</option> <!-- Adjust based on your User model -->                }            </select>        </div>        <button class="btn btn-success" @onclick="UpdateTicketStatus">Update Status</button>        <button class="btn btn-warning" @onclick="RedirectTicket">Redirect Ticket</button>    </div>}@if (!string.IsNullOrEmpty(errorMessage)){    <p class="text-danger">@errorMessage</p>}@code {    private List<Ticket>? assignedTickets;    private Ticket? selectedTicket;    private string? errorMessage;    private string? selectedAgent;    private List<User> agents = new List<User>();    protected override void OnInitialized()    {        // Check if the user is an authenticated agent        if (GlobalVariables.isAgent && !string.IsNullOrEmpty(GlobalVariables.CurrentAgentName))        {            LoadAssignedTickets();            LoadAgents(); // Load available agents for redirection        }        else        {            NavigationManager.NavigateTo("/agent-login");        }    }    private void LoadAssignedTickets()    {        try        {            // Fetch tickets assigned to the current agent            assignedTickets = _context.Tickets                 .Where(t => t.AssignTo == GlobalVariables.CurrentAgentName).ToList();        }        catch (Exception ex)        {            errorMessage = "An error occurred while loading tickets: " + ex.Message;        }    }    private void LoadAgents()    {        try        {            // Fetch all agents for the dropdown            agents = _context.Users.Where(u => u.Role == "agent").ToList();// Ensure you have an Agents DbSet in your context        }        catch (Exception ex)        {            errorMessage = "An error occurred while loading agents: " + ex.Message;        }    }    private void SelectTicket(Ticket ticket)    {        selectedTicket = ticket;    }    private async Task UpdateTicketStatus()    {        if (selectedTicket != null && !string.IsNullOrWhiteSpace(selectedTicket.Status))        {            try            {                // Update ticket status in the database                var ticketToUpdate = await _context.Tickets.FindAsync(selectedTicket.TicketId);                if (ticketToUpdate != null)                {                    ticketToUpdate.Status = selectedTicket.Status;                    await _context.SaveChangesAsync();  // Persist changes to the database                    LoadAssignedTickets(); // Refresh the list to reflect updated ticket status                    selectedTicket = null; // Clear the selection after update                }            }            catch (Exception ex)            {                errorMessage = "Failed to update ticket status: " + ex.Message;            }        }    }    private async Task RedirectTicket()    {        if (selectedTicket != null && !string.IsNullOrEmpty(selectedAgent))        {            try            {                // Redirect ticket to the selected agent                var ticketToRedirect = await _context.Tickets.FindAsync(selectedTicket.TicketId);                if (ticketToRedirect != null)                {                    ticketToRedirect.AssignTo = selectedAgent; // Update the agent assignment                    await _context.SaveChangesAsync();  // Persist changes to the database                    LoadAssignedTickets(); // Refresh the list to reflect changes                    selectedTicket = null; // Clear the selection after redirection                    selectedAgent = null; // Reset the selected agent                }            }            catch (Exception ex)            {                errorMessage = "Failed to redirect ticket: " + ex.Message;            }        }    }}
+@page "/agent_dashboard"
+@using BlazorApp2.Models
+@using BlazorApp2.Services
+@inject TicketService TicketService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+@inject TicketContext _context
+
+<h3>Agent Dashboard</h3>
+
+@if (assignedTickets == null)
+{
+    <p>Loading assigned tickets...</p>
+}
+else if (assignedTickets.Count == 0)
+{
+    <p>No tickets have been assigned to you.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>TicketId</th>
+                <th>Title</th>
+                <th>CustomerName</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in assignedTickets)
+            {
+                <tr>
+                    <td>@ticket.TicketId</td>
+                    <td>@ticket.Title</td>
+                    <td>@ticket.CustomerName</td>
+                    <td>@ticket.Status</td>
+                    <td>
+                        <button class="btn btn-info" @onclick="() => SelectTicket(ticket)">Review</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (selectedTicket != null)
+{
+    <div class="ticket-details">
+        <h4>Review Ticket Details</h4>
+        <div>
+            <label>Ticket ID:</label>
+            <span>@selectedTicket.TicketId</span>
+        </div>
+        <div>
+            <label>Title:</label>
+            <span>@selectedTicket.Title</span>
+        </div>
+        <div>
+            <label>Customer Name:</label>
+            <span>@selectedTicket.CustomerName</span>
+        </div>
+        <div>
+            <label>Issue:</label>
+            <span>@selectedTicket.Issue</span>
+        </div>
+        <div>
+            <label>Company Name:</label>
+            <span>@selectedTicket.CompanyName</span>
+        </div>
+        <div>
+            <label>Issue Category:</label>
+            <span>@selectedTicket.IssueCategory</span>
+        </div>
+        <div>
+            <label>Description:</label>
+            <span>@selectedTicket.Description</span>
+        </div>
+        <div>
+            <label>Status:</label>
+            <input type="text" @bind="selectedTicket.Status" />
+        </div>
+        <!-- Dropdown for redirecting the ticket -->
+        <div>
+            <label>Redirect to:</label>
+            <select @bind="selectedAgent">
+                <option value="">Select Agent</option>
+                @foreach (var agent in agents)
+                {
+                    <option value="@agent.Username">@agent.Username</option>
+                }
+            </select>
+        </div>
+        <button class="btn btn-success" @onclick="UpdateTicketStatus">Update Status</button>
+        <button class="btn btn-warning" @onclick="RedirectTicket">Redirect Ticket</button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p class="text-danger">@errorMessage</p>
+}
+
+@code {
+    private List<Ticket>? assignedTickets;
+    private Ticket? selectedTicket;
+    private string? errorMessage;
+    private string? selectedAgent;
+    private List<User> agents = new List<User>();
+
+    protected override void OnInitialized()
+    {
+        if (GlobalVariables.isAgent && !string.IsNullOrEmpty(GlobalVariables.CurrentAgentName))
+        {
+            LoadAssignedTickets();
+            LoadAgents(); // Load agents for redirection
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/agent-login");
+        }
+    }
+
+    private void LoadAssignedTickets()
+    {
+        try
+        {
+            assignedTickets = _context.Tickets
+                .Where(t => t.AssignTo == GlobalVariables.CurrentAgentName).ToList();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while loading tickets: " + ex.Message;
+        }
+    }
+
+    private void LoadAgents()
+    {
+        try
+        {
+            agents = _context.Users.Where(u => u.Role == "agent").ToList(); // Fetch agents
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while loading agents: " + ex.Message;
+        }
+    }
+
+    private void SelectTicket(Ticket ticket)
+    {
+        selectedTicket = ticket;
+    }
+
+    private async Task UpdateTicketStatus()
+    {
+        if (selectedTicket != null && !string.IsNullOrWhiteSpace(selectedTicket.Status))
+        {
+            try
+            {
+                var ticketToUpdate = await _context.Tickets.FindAsync(selectedTicket.TicketId);
+                if (ticketToUpdate != null)
+                {
+                    ticketToUpdate.Status = selectedTicket.Status;
+                    await _context.SaveChangesAsync(); // Save changes to DB
+                    LoadAssignedTickets(); // Refresh list
+                    selectedTicket = null; // Clear form after update
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Failed to update ticket status: " + ex.Message;
+            }
+        }
+    }
+
+    private async Task RedirectTicket()
+    {
+        if (selectedTicket != null && !string.IsNullOrEmpty(selectedAgent))
+        {
+            try
+            {
+                var ticketToRedirect = await _context.Tickets.FindAsync(selectedTicket.TicketId);
+                if (ticketToRedirect != null)
+                {
+                    ticketToRedirect.AssignTo = selectedAgent; // Update agent
+                    await _context.SaveChangesAsync(); // Save changes to DB
+                    LoadAssignedTickets(); // Refresh list
+                    selectedTicket = null;
+                    selectedAgent = null; // Clear selection
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Failed to redirect ticket: " + ex.Message;
+            }
+        }
+    }
+}
