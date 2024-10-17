@@ -25,6 +25,7 @@ button {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    background-color:#1B6EC2;
 }
 
     /* Approve button */
@@ -35,6 +36,7 @@ button {
 
     /* Reject button */
     button:last-child {
+        background-color: #f44336;
         color: white;
     }
 
