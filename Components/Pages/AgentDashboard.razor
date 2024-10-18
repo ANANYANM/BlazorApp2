@@ -77,9 +77,16 @@ else
             <label>Description:</label>
             <span>@selectedTicket.Description</span>
         </div>
+        <!-- Updated status dropdown -->
         <div>
             <label>Status:</label>
-            <input type="text" @bind="selectedTicket.Status" />
+            <select @bind="selectedTicketStatus">
+                <!-- <input type="text"@bind="selectedTicketStatus" /> -->
+                <option value="">Update status</option>
+                <option value="Open">Open</option>
+                <option value="Initiated">Initiated</option>
+                <option value="Completed">Completed</option>
+            </select>
         </div>
         <!-- Dropdown for redirecting the ticket -->
         <div>
@@ -107,6 +114,7 @@ else
     private Ticket? selectedTicket;
     private string? errorMessage;
     private string? selectedAgent;
+    private string? selectedTicketStatus;
     private List<User> agents = new List<User>();
 
     protected override void OnInitialized()
@@ -150,18 +158,19 @@ else
     private void SelectTicket(Ticket ticket)
     {
         selectedTicket = ticket;
+        selectedTicketStatus = ticket.Status; // Initialize dropdown with the current status
     }
 
     private async Task UpdateTicketStatus()
     {
-        if (selectedTicket != null && !string.IsNullOrWhiteSpace(selectedTicket.Status))
+        if (selectedTicket != null && !string.IsNullOrWhiteSpace(selectedTicketStatus))
         {
             try
             {
                 var ticketToUpdate = await _context.Tickets.FindAsync(selectedTicket.TicketId);
                 if (ticketToUpdate != null)
                 {
-                    ticketToUpdate.Status = selectedTicket.Status;
+                    ticketToUpdate.Status = selectedTicketStatus;
                     await _context.SaveChangesAsync(); // Save changes to DB
                     LoadAssignedTickets(); // Refresh list
                     selectedTicket = null; // Clear form after update
