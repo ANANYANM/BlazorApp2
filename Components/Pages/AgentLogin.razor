@@ -32,16 +32,22 @@
     {
         var user = await UserService.AuthenticateUser(username, password);
 
-        if (user != null && user.Role == "agent" )
+        if (user != null && user.Role == "agent")
         {
-            // enabling this to access view tickets page
+            if(user.IsActive)
+            {
             GlobalVariables.isAgent = true;
             GlobalVariables.CurrentAgentName = username; // Set the logged-in agent's name
             NavigationManager.NavigateTo("/agent_dashboard");
+            }
+        else 
+            {
+                errorMessage = "This agent is deactivated.";
+            }
         }
-        else
-        {
-            errorMessage = "Invalid username or password.";
+         else
+            {
+                errorMessage = "Invalid username or password.";
+            }
         }
     }
-}
